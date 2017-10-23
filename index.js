@@ -15,16 +15,22 @@ function pad(str, len) {
   return str
 }
 
+var l = { };
+
 Bleacon.on('discover', (beacon) => {
   const elapsed = new Date().getTime() - startedAt
   const uuid = beacon.uuid
   const major = pad(beacon.major.toString(16), 4)
   const minor = pad(beacon.minor.toString(16), 4)
-  let info = `${elapsed}: ${uuid} | ${major} | ${minor}`
-  if (isBean(beacon)) {
-    info += ' <-- Bean!'
+  if (!l[uuid]) {
+    //console.log(uuid)
+    l[uuid+major+minor] = uuid
+    let info = `${elapsed}: ${uuid} | ${major} | ${minor}`
+    if (isBean(beacon)) {
+      info += ' <-- Bean!'
+    }
+    console.log(info)
   }
-  console.log(info)
 })
 Bleacon.startScanning()
 
